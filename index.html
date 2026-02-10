@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[ PORTFOLIO // SYSTEM ]</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #282c34;
+    --surface: #21252b;
+    --overlay: #1b1e24;
+    --text: #abb2bf;
+    --subtext: #636d83;
+    --green: #3fc56b;
+    --red: #ff6480;
+    --yellow: #f9c859;
+    --blue: #10b1fe;
+    --mauve: #9f7efe;
+    --teal: #3691ff;
+    --peach: #ff936a;
+    --border: #3a3f4b;
+    --glow-green: rgba(63, 197, 107, 0.15);
+    --glow-blue: rgba(16, 177, 254, 0.12);
+    --scanline: rgba(0, 0, 0, 0.03);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      var(--scanline) 2px,
+      var(--scanline) 4px
+    );
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* GLITCH KEYFRAMES */
+  @keyframes glitch {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1px, -2px); }
+    80% { transform: translate(1px, 2px); }
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.8; }
+    94% { opacity: 1; }
+    96% { opacity: 0.6; }
+    97% { opacity: 1; }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes borderPulse {
+    0%, 100% { border-color: var(--green); box-shadow: 0 0 0 var(--glow-green); }
+    50% { border-color: var(--blue); box-shadow: 0 0 20px var(--glow-blue); }
+  }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    z-index: 998;
+    padding: 12px 40px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  nav a {
+    color: var(--subtext);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+    position: relative;
+  }
+
+  nav a::before {
+    content: '>';
+    color: var(--green);
+    margin-right: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--green);
+    text-shadow: 0 0 10px var(--glow-green);
+  }
+
+  nav a:hover::before { opacity: 1; }
+
+  /* MAIN */
+  main {
+    margin-top: 60px;
+    padding: 0;
+  }
+
+  /* HERO SECTION */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px;
+    position: relative;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .hero-grid {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 10px;
+    color: var(--subtext);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeSlideUp 0.6s ease-out;
+  }
+
+  .hero-name {
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 800;
+    line-height: 0.95;
+    color: var(--text);
+    margin-bottom: 30px;
+    animation: fadeSlideUp 0.8s ease-out;
+    position: relative;
+  }
+
+  .hero-name .accent { color: var(--green); }
+
+  .hero-name::after {
+    content: '_';
+    color: var(--green);
+    animation: blink 1s step-end infinite;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+    color: var(--subtext);
+    max-width: 600px;
+    line-height: 1.8;
+    animation: fadeSlideUp 1s ease-out;
+    border-left: 3px solid var(--mauve);
+    padding-left: 20px;
+  }
+
+  .hero-subtitle .keyword { color: var(--mauve); }
+  .hero-subtitle .string { color: var(--green); }
+  .hero-subtitle .comment { color: var(--subtext); font-style: italic; }
+
+  .hero-coords {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    font-size: 10px;
+    color: var(--subtext);
+    text-align: right;
+    line-height: 2;
+    opacity: 0.5;
+  }
+
+  /* SECTION HEADERS */
+  .section {
+    padding: 80px 60px;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+
+  .section-number {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 300;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ABOUT SECTION */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .about-terminal {
+    background: var(--overlay);
+    border: 1px solid var(--border);
+    padding: 0;
+    position: relative;
+  }
+
+  .terminal-header {
+    background: var(--surface);
+    padding: 10px 16px;
+    font-size: 10px;
+    color: var(--subtext);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .terminal-header .dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .terminal-header .dots span {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .terminal-header .dots span:nth-child(1) { background: var(--red); }
+  .terminal-header .dots span:nth-child(2) { background: var(--yellow); }
+  .terminal-header .dots span:nth-child(3) { background: var(--green); }
+
+  .terminal-body {
+    padding: 24px;
+    font-size: 12px;
+    line-height: 2;
+  }
+
+  .terminal-body .prompt { color: var(--green); }
+  .terminal-body .flag { color: var(--peach); }
+  .terminal-body .value { color: var(--blue); }
+  .terminal-body .output { color: var(--subtext); }
+
+  /* PROJECTS SECTION */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 3px;
+    align-items: stretch;
+  }
+
+  .project-card {
+    background: var(--overlay);
+    border: 1px solid var(--border);
+    padding: 0;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--green);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+
+  .project-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 30px var(--glow-green), inset 0 0 30px var(--glow-green);
+  }
+
+  .project-card:hover::before { transform: scaleY(1); }
+
+  .project-card:hover .project-arrow {
+    transform: translate(4px, -4px);
+    color: var(--green);
+  }
+
+  .project-top {
+    padding: 24px 28px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .project-id {
+    font-size: 10px;
+    color: var(--subtext);
+    letter-spacing: 2px;
+  }
+
+  .project-arrow {
+    font-size: 18px;
+    color: var(--subtext);
+    transition: all 0.3s;
+  }
+
+  .project-body {
+    padding: 0 28px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .project-desc {
+    font-size: 11px;
+    color: var(--subtext);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 9px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--subtext);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .project-card:hover .tag {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .project-footer {
+    padding: 12px 28px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--subtext);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .project-footer .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .project-footer .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 2s step-end infinite;
+  }
+
+  /* CONTACT SECTION */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 3px;
+  }
+
+  .contact-card {
+    background: var(--overlay);
+    border: 1px solid var(--border);
+    padding: 30px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .contact-card:hover {
+    border-color: var(--mauve);
+    box-shadow: 0 0 20px rgba(203, 166, 247, 0.1);
+  }
+
+  .contact-label {
+    font-size: 9px;
+    color: var(--subtext);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+
+  .contact-value {
+    font-size: 14px;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: var(--subtext);
+    border-top: 2px solid var(--border);
+  }
+
+  footer .sig { color: var(--green); }
+
+  /* ASCII ART DECORATION */
+  .ascii-decor {
+    position: absolute;
+    font-size: 10px;
+    color: var(--border);
+    line-height: 1.2;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { padding: 60px 24px; }
+    .section { padding: 60px 24px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    nav { padding: 12px 24px; gap: 16px; flex-wrap: wrap; }
+    footer { padding: 30px 24px; flex-direction: column; gap: 12px; }
+    .hero-coords { display: none; }
+  }
+
+  /* CUSTOM SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--overlay); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+  /* SELECTION */
+  ::selection {
+    background: var(--green);
+    color: var(--overlay);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#about">about</a>
+  <a href="#projects">projects</a>
+  <a href="#contact">contact</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-label">// WELCOME TO MY TERMINAL</div>
+    <h1 class="hero-name">
+      YOUR<br><span class="accent">NAME</span>
+    </h1>
+    <p class="hero-subtitle">
+      <span class="keyword">class</span> <span style="color: var(--red);">Developer</span>:<br>
+      &nbsp;&nbsp;role = <span class="string">"Full-Stack Engineer"</span><br>
+      &nbsp;&nbsp;passion = <span class="string">"Building elegant systems"</span><br>
+      &nbsp;&nbsp;focus = <span class="string">"Web • Systems • Open Source"</span><br>
+      <span class="comment"># let's build something great</span>
+    </p>
+    <div class="hero-coords">
+      MEM.ALLOC: 64.2 GB<br>
+      STATUS: <span style="color: var(--green);">ONLINE</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">About</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-terminal">
+        <div class="terminal-header">
+          <div class="dots"><span></span><span></span><span></span></div>
+          ~/about — bash
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> cat about.txt<br><br>
+          <span class="output">
+            I'm a developer who loves building things<br>
+            that live on the internet. I care about<br>
+            clean code, good design, and making tools<br>
+            that people actually want to use.<br><br>
+          </span>
+          <span class="prompt">$</span> whoami <span class="flag">--verbose</span><br>
+          <span class="value">→ Full-Stack Developer</span><br>
+          <span class="value">→ Open Source Contributor</span><br>
+          <span class="value">→ Problem Solver</span><br><br>
+          <span class="prompt">$</span> cat interests.txt<br><br>
+          <span class="output">
+            When I'm not writing code, you'll find me<br>
+            exploring new technologies, contributing to<br>
+            open source projects, and diving deep into<br>
+            systems design and architecture.<br><br>
+          </span>
+          <span class="prompt">$</span> ls <span class="flag">-la</span> ./values/<br>
+          <span class="value">drwxr-xr-x  clean-code/</span><br>
+          <span class="value">drwxr-xr-x  user-experience/</span><br>
+          <span class="value">drwxr-xr-x  continuous-learning/</span><br>
+          <span class="value">drwxr-xr-x  collaboration/</span><br><br>
+          <span class="prompt">$</span> <span style="animation: blink 1s step-end infinite;">▊</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+
+      <a href="https://github.com/yourusername/project-alpha" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-001</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">Project Alpha</h3>
+          <p class="project-desc">A high-performance real-time data pipeline for processing millions of events per second with sub-millisecond latency.</p>
+          <div class="project-tags">
+            <span class="tag">Rust</span>
+            <span class="tag">Kafka</span>
+            <span class="tag">Redis</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 342</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/neural-canvas" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-002</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">Neural Canvas</h3>
+          <p class="project-desc">AI-powered generative art platform that transforms text descriptions into unique digital artworks using custom diffusion models.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">PyTorch</span>
+            <span class="tag">React</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 1.2k</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/voidshell" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-003</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">VoidShell</h3>
+          <p class="project-desc">A minimal, blazing-fast terminal emulator with built-in multiplexer, GPU rendering, and extensible plugin system.</p>
+          <div class="project-tags">
+            <span class="tag">Rust</span>
+            <span class="tag">OpenGL</span>
+            <span class="tag">WASM</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 876</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/cryptowatch" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-004</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">CryptoWatch</h3>
+          <p class="project-desc">Real-time cryptocurrency dashboard with advanced charting, portfolio tracking, and automated alert system.</p>
+          <div class="project-tags">
+            <span class="tag">TypeScript</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">WebSocket</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 567</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/infractl" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-005</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">InfraCTL</h3>
+          <p class="project-desc">Declarative infrastructure management CLI that unifies Terraform, Ansible, and K8s workflows into a single elegant tool.</p>
+          <div class="project-tags">
+            <span class="tag">Go</span>
+            <span class="tag">K8s</span>
+            <span class="tag">Terraform</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 203</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/pixelforge" target="_blank" rel="noopener" class="project-card">
+        <div class="project-top">
+          <span class="project-id">PRJ-006</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">PixelForge</h3>
+          <p class="project-desc">Browser-based pixel art editor with real-time collaboration, animation timeline, and one-click export to sprite sheets.</p>
+          <div class="project-tags">
+            <span class="tag">Canvas API</span>
+            <span class="tag">WebRTC</span>
+            <span class="tag">Svelte</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <div class="status"><span class="status-dot"></span> Active</div>
+          <span>★ 445</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-grid">
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">github.com/yourusername</div>
+      </a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">linkedin.com/in/yourusername</div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div><span class="sig">&lt;/&gt;</span> Designed & Built using Opus 4.6</div>
+  <div>© 2026 — Luis Ceballos</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section').forEach(
