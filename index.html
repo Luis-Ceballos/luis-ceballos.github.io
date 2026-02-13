@@ -309,137 +309,6 @@
   .terminal-body .value { color: var(--blue); }
   .terminal-body .output { color: var(--subtext); }
 
-  /* PROJECTS SECTION */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 3px;
-    align-items: stretch;
-  }
-
-  .project-card {
-    background: var(--overlay);
-    border: 1px solid var(--border);
-    padding: 0;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-  }
-
-  .project-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: var(--green);
-    transform: scaleY(0);
-    transition: transform 0.3s;
-    transform-origin: bottom;
-  }
-
-  .project-card:hover {
-    border-color: var(--green);
-    box-shadow: 0 0 30px var(--glow-green), inset 0 0 30px var(--glow-green);
-  }
-
-  .project-card:hover::before { transform: scaleY(1); }
-
-  .project-card:hover .project-arrow {
-    transform: translate(4px, -4px);
-    color: var(--green);
-  }
-
-  .project-top {
-    padding: 24px 28px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .project-id {
-    font-size: 10px;
-    color: var(--subtext);
-    letter-spacing: 2px;
-  }
-
-  .project-arrow {
-    font-size: 18px;
-    color: var(--subtext);
-    transition: all 0.3s;
-  }
-
-  .project-body {
-    padding: 0 28px 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .project-name {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .project-desc {
-    font-size: 11px;
-    color: var(--subtext);
-    line-height: 1.8;
-    margin-bottom: 16px;
-    flex: 1;
-  }
-
-  .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-size: 9px;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    color: var(--subtext);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-  }
-
-  .project-card:hover .tag {
-    border-color: var(--green);
-    color: var(--green);
-  }
-
-  .project-footer {
-    padding: 12px 28px;
-    border-top: 1px solid var(--border);
-    font-size: 10px;
-    color: var(--subtext);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .project-footer .status {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .project-footer .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: blink 2s step-end infinite;
-  }
-
   /* CONTACT SECTION */
   .contact-grid {
     display: grid;
@@ -504,7 +373,6 @@
     .hero { padding: 60px 24px; }
     .section { padding: 60px 24px; }
     .about-grid { grid-template-columns: 1fr; }
-    .projects-grid { grid-template-columns: 1fr; }
     nav { padding: 12px 24px; gap: 16px; flex-wrap: wrap; }
     footer { padding: 30px 24px; flex-direction: column; gap: 12px; }
     .hero-coords { display: none; }
@@ -528,7 +396,6 @@
 <!-- NAV -->
 <nav>
   <a href="#about">about</a>
-  <a href="#projects">projects</a>
   <a href="#contact">contact</a>
 </nav>
 
@@ -598,142 +465,10 @@
     </div>
   </section>
 
-  <!-- PROJECTS -->
-  <section class="section" id="projects">
-    <div class="section-header">
-      <span class="section-number">02</span>
-      <h2 class="section-title">Projects</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="projects-grid">
-
-      <a href="https://github.com/yourusername/project-alpha" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-001</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">Project Alpha</h3>
-          <p class="project-desc">A high-performance real-time data pipeline for processing millions of events per second with sub-millisecond latency.</p>
-          <div class="project-tags">
-            <span class="tag">Rust</span>
-            <span class="tag">Kafka</span>
-            <span class="tag">Redis</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 342</span>
-        </div>
-      </a>
-
-      <a href="https://github.com/yourusername/neural-canvas" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-002</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">Neural Canvas</h3>
-          <p class="project-desc">AI-powered generative art platform that transforms text descriptions into unique digital artworks using custom diffusion models.</p>
-          <div class="project-tags">
-            <span class="tag">Python</span>
-            <span class="tag">PyTorch</span>
-            <span class="tag">React</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 1.2k</span>
-        </div>
-      </a>
-
-      <a href="https://github.com/yourusername/voidshell" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-003</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">VoidShell</h3>
-          <p class="project-desc">A minimal, blazing-fast terminal emulator with built-in multiplexer, GPU rendering, and extensible plugin system.</p>
-          <div class="project-tags">
-            <span class="tag">Rust</span>
-            <span class="tag">OpenGL</span>
-            <span class="tag">WASM</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 876</span>
-        </div>
-      </a>
-
-      <a href="https://github.com/yourusername/cryptowatch" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-004</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">CryptoWatch</h3>
-          <p class="project-desc">Real-time cryptocurrency dashboard with advanced charting, portfolio tracking, and automated alert system.</p>
-          <div class="project-tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag">Next.js</span>
-            <span class="tag">WebSocket</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 567</span>
-        </div>
-      </a>
-
-      <a href="https://github.com/yourusername/infractl" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-005</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">InfraCTL</h3>
-          <p class="project-desc">Declarative infrastructure management CLI that unifies Terraform, Ansible, and K8s workflows into a single elegant tool.</p>
-          <div class="project-tags">
-            <span class="tag">Go</span>
-            <span class="tag">K8s</span>
-            <span class="tag">Terraform</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 203</span>
-        </div>
-      </a>
-
-      <a href="https://github.com/yourusername/pixelforge" target="_blank" rel="noopener" class="project-card">
-        <div class="project-top">
-          <span class="project-id">PRJ-006</span>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-body">
-          <h3 class="project-name">PixelForge</h3>
-          <p class="project-desc">Browser-based pixel art editor with real-time collaboration, animation timeline, and one-click export to sprite sheets.</p>
-          <div class="project-tags">
-            <span class="tag">Canvas API</span>
-            <span class="tag">WebRTC</span>
-            <span class="tag">Svelte</span>
-          </div>
-        </div>
-        <div class="project-footer">
-          <div class="status"><span class="status-dot"></span> Active</div>
-          <span>★ 445</span>
-        </div>
-      </a>
-
-    </div>
-  </section>
-
   <!-- CONTACT -->
   <section class="section" id="contact">
     <div class="section-header">
-      <span class="section-number">03</span>
+      <span class="section-number">02</span>
       <h2 class="section-title">Contact</h2>
       <div class="section-line"></div>
     </div>
